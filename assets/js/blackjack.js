@@ -19,26 +19,47 @@
   }
 
   var game = {
-      playerHand: [],
-      houseHand: [],
+      user: {
+        name: 'Player',
+        hand: [],
+      },
+      house: {
+        name: "The House",
+        hand: [],
+      },
 
       deal: function(deck, player) {
         for(var i = 0; i<2; i++) {
           var rand = Math.floor(Math.random() * deck.length)
           var card = deck.splice(rand,1)
-          player.push(card[0])
-
-          console.log()
+          player.hand.push(card[0])
         }
       },
+
+      hit: function(deck, player) {
+        var rand = Math.floor(Math.random() * deck.length);
+        var card = deck.splice(rand,1);
+        player.hand.push(card[0])
+      },
+
+      checkBust: function(player) {
+        var total = 0;
+        for(var i in player.hand) {
+          total += player.hand[i].value;
+        }
+        if(total > 21) {
+          console.log(player.name + " bust with " +total)
+        }
+      }
 
 
 
   }
 
   createDeck(mainDeck)
-  game.deal(mainDeck, game.playerHand)
-  console.log(game.playerHand)
+  game.deal(mainDeck, game.user)
+  game.deal(mainDeck, game.house)
+  console.log(game.user.hand)
   // console.log(mainDeck)
 
 // })
