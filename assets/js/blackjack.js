@@ -13,6 +13,10 @@
       if(suit === 1) suit = "diamond";
       if(suit === 2) suit = "club";
       if(suit === 3) suit = "spade";
+      if(value === 0) value = true; // true = 11 false = 1
+      if(value === 11) value = 'J';
+      if(value === 12) value = 'Q';
+      if(value === 1) value = 'K';
       
       deck.push({'value': value, 'suit': suit});
     }
@@ -23,36 +27,22 @@
         name: 'Player',
         hand: [],
         bust: false,
-        area: $("#player_cards")
+        area: $("#player_cards"),
+        bank: 100
       },
       house: {
         name: "The House",
         hand: [],
         bust: false,
-        area: $("#house_cards")
+        area: $("#house_cards"),
       },
 
       deal: function(deck, player) {
-        // this is wrong stupid.
-        // deal 2 to the dealer and then if the player stands
-        // deal until 17. Close but no cigar.
-        if(player.name === "The House") {
-          var houseTotal = 0;
-          while(houseTotal < 17) {
-            var rand = Math.floor(Math.random() * deck.length);
-            var card = deck.splice(rand,1);
-            player.hand.push(card[0]);
-            player.hand.forEach(function(a) {
-              houseTotal += a.value
-            })
-          }
-        } else {
           for(var i = 0; i<2; i++) {
             var rand = Math.floor(Math.random() * deck.length);
             var card = deck.splice(rand,1);
             player.hand.push(card[0]);
           }
-        }
       },
 
       hit: function(deck, player) {
@@ -60,18 +50,28 @@
         var card = deck.splice(rand,1);
         player.hand.push(card[0]);
         // ace check?
-        game.checkBust(player);
       },
 
       checkBust: function(player) {
         var total = 0;
-        for(var i in player.hand) {
-          total += player.hand[i].value;
-        }
+        player.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            total += 10;
+          } else if(a.value === true) {
+            total += 11;
+          } else if(a.value === false) {
+            total += 1;
+          } else {
+            total += a.value
+          }
+        });
         if(total > 21) {
-          console.log(player.name + " bust with " +total)
+          newMsg(player.name + " bust with " +total);
+          console.log(player.name + " bust with " +total);
           player.bust = true;
           // hide buttons
+          $("#hit").hide();
+          $("#stand").hide();
           // end game or some shit
         }
       },
@@ -79,14 +79,28 @@
       play: function() {
         var userTotal = 0;
         game.user.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            userTotal += 10;
+          } else if(a.value === true) {
+            userTotal += 11;
+          } else if(a.value === false) {
+            userTotal += 1;
+          } else {
             userTotal += a.value
+          }
         });
         var houseTotal = 0;
         game.house.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            houseTotal += 10;
+          } else if(a.value === true) {
+            userTotal += 11;
+          } else if(a.value === false) {
+            userTotal += 1;
+          } else {
             houseTotal += a.value
+          }
         });
-
-        console.log(userTotal, houseTotal)
 
         if(userTotal > houseTotal) {
           console.log("Player wins!");
@@ -97,13 +111,37 @@
         }
       },
 
+      stand: function() {
+          var houseTotal = 0;
+
+          while(houseTotal < 17) {
+            var rand = Math.floor(Math.random() * deck.length);
+            var card = deck.splice(rand,1);
+            game.house.hand.push(card[0]);
+            game.house.hand.forEach(function(a) {
+              if(a.value === "K" || a.value === "Q" || a.value === "J") {
+                houseTotal += 10;
+              } else {
+                houseTotal += a.value
+              }
+            })
+          }
+
+          showCards(game.house);
+        },
+
       showCards: function(player) {
         var playArea = player.area;
+        playArea.children().remove()
         player.hand.forEach(function(val) {
           var newCard = $("<div class='card'>");
           newCard.append($("<div class='suit'>").addClass(val.suit));
-          newCard.append($("<div class='card_number'>").text(val.value));
-          playArea.append(newCard)
+          if(val.value === true) {
+            newCard.append($("<div class='card_number'>").text('A'));
+          } else {
+            newCard.append($("<div class='card_number'>").text(val.value));
+          }
+          playArea.append(newCard);
 
         })
 
@@ -111,12 +149,50 @@
   } // game obj ends
 
   // jQuery stuff
+
+  function newMsg(msg) {
+    var msg = $("<li>").text(msg)
+    $(".message").append(msg)
+  }
+
+  $("#hit").hide();
+  $("#stand").hide();
+
+  function start() {
+    $("#start").click(function() {
+      createDeck(mainDeck)
+      game.deal(mainDeck, game.user)
+      game.deal(mainDeck, game.house)
+      $("#hit").show();
+      $("#stand").show();
+      game.showCards(game.house);
+      game.showCards(game.user);
+      $(this).hide();
+    })
+  }
+
+  function stand() {
+    $("#stand").click(function() {
+
+    })
+  }
+
+  function playerHit() {
+    $("#hit").click(function() {
+      game.hit(mainDeck, game.user);
+      game.checkBust(game.user);
+      game.showCards(game.user);
+    })
+  }
+
+
+
+  function eventListener() {
+    start();
+    playerHit();
+  }
   
-
-
-  createDeck(mainDeck)
-  game.deal(mainDeck, game.user)
-  game.deal(mainDeck, game.house)
+  eventListener()
 
 
 // })
