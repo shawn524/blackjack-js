@@ -23,11 +23,13 @@
         name: 'Player',
         hand: [],
         bust: false,
+        area: $("#player_cards")
       },
       house: {
         name: "The House",
         hand: [],
         bust: false,
+        area: $("#house_cards")
       },
 
       deal: function(deck, player) {
@@ -95,10 +97,22 @@
         }
       },
 
+      showCards: function(player) {
+        var playArea = player.area;
+        player.hand.forEach(function(val) {
+          var newCard = $("<div class='card'>");
+          newCard.append($("<div class='suit'>").addClass(val.suit));
+          newCard.append($("<div class='card_number'>").text(val.value));
+          playArea.append(newCard)
 
+        })
 
+      },
+  } // game obj ends
 
-  } // game ends
+  // jQuery stuff
+  
+
 
   createDeck(mainDeck)
   game.deal(mainDeck, game.user)
