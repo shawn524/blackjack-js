@@ -51,77 +51,58 @@
         player.hand.push(card[0]);
       },
 
-      aceCheck: function(player) {
-        game.user.hand.forEach(function(a) {
-          if(a.value === "K" || a.value === "Q" || a.value === "J") {
-            userTotal += 10;
-          } else if(a.value === true) {
-            userTotal += 11;
-          } else if(a.value === false) {
-            userTotal += 1;
-          } else {
-            userTotal += a.value
-          }
-        });
-      },
-
-      checkBust: function(player) {
-        var total = 0;
+      checkTotal: function(player) {
+        // run once and save the value
+        var runningTotal = 0;
         player.hand.forEach(function(a) {
           if(a.value === "K" || a.value === "Q" || a.value === "J") {
-            total += 10;
+            runningTotal += 10;
           } else if(a.value === true) {
-            total += 11;
+            runningTotal += 11;
           } else if(a.value === false) {
-            total += 1;
+            runningTotal += 1;
           } else {
-            total += a.value
+            runningTotal += a.value
           }
         });
-        if(total > 21) {
-          newMsg(player.name + " bust with " +total);
-          console.log(player.name + " bust with " +total);
+        console.log(runningTotal, "first")
+        // if greater then 21, run again and check for aces
+        // if aces found, set to false, run again
+        if(runningTotal > 21) {
+          player.hand.forEach(function(a) {
+            if(a.value === true) {
+              a.value = false
+            }
+          })
+          runningTotal = 0;
+          console.log(runningTotal, "second")
+
+          // add up again (probably a better way of doing this)
+          player.hand.forEach(function(a) {
+            if(a.value === "K" || a.value === "Q" || a.value === "J") {
+              runningTotal += 10;
+            } else if(a.value === true) {
+              runningTotal += 11;
+            } else if(a.value === false) {
+              runningTotal += 1;
+            } else {
+              runningTotal += a.value
+            }
+          });
+          console.log(runningTotal, "third")
+        }
+        
+        // if total still more then 21, bust
+        if(runningTotal > 21) {
+          newMsg(player.name + " bust with " +runningTotal);
+          console.log(player.name + " bust with " +runningTotal);
           player.bust = true;
           // hide buttons
           $("#hit").hide();
           $("#stand").hide();
-          // end game or some shit
         }
-      },
-
-      play: function() {
-        var userTotal = 0;
-        game.user.hand.forEach(function(a) {
-          if(a.value === "K" || a.value === "Q" || a.value === "J") {
-            userTotal += 10;
-          } else if(a.value === true) {
-            userTotal += 11;
-          } else if(a.value === false) {
-            userTotal += 1;
-          } else {
-            userTotal += a.value
-          }
-        });
-        var houseTotal = 0;
-        game.house.hand.forEach(function(a) {
-          if(a.value === "K" || a.value === "Q" || a.value === "J") {
-            houseTotal += 10;
-          } else if(a.value === true) {
-            userTotal += 11;
-          } else if(a.value === false) {
-            userTotal += 1;
-          } else {
-            houseTotal += a.value
-          }
-        });
-
-        if(userTotal > houseTotal) {
-          console.log("Player wins!");
-        } else if(userTotal < houseTotal) {
-          console.log("The house always wins.");
-        } else if(userTotal == houseTotal) {
-          console.log("Push")
-        }
+        console.log(runningTotal, "fourth")
+        
       },
 
       stand: function() {
@@ -149,7 +130,7 @@
         player.hand.forEach(function(val) {
           var newCard = $("<div class='card'>");
           newCard.append($("<div class='suit'>").addClass(val.suit));
-          if(val.value === true) {
+          if(val.value === true || val.value === false) {
             newCard.append($("<div class='card_number'>").text('A'));
           } else {
             newCard.append($("<div class='card_number'>").text(val.value));
@@ -160,8 +141,6 @@
 
       },
   } // game obj ends
-
-  // jQuery stuff
 
   function newMsg(msg) {
     var msg = $("<li>").text(msg)
@@ -193,7 +172,7 @@
   function playerHit() {
     $("#hit").click(function() {
       game.hit(mainDeck, game.user);
-      game.checkBust(game.user);
+      game.checkTotal(game.user);
       game.showCards(game.user);
     })
   }

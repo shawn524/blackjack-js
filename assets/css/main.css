@@ -54,7 +54,7 @@ li {
 
 #house_cards {
   height: 100px;
-  width: 60%;
+  width: 80%;
   margin: 10px auto 100px auto;
   border: 1px solid orange;
 }
@@ -71,7 +71,7 @@ li {
 
 #player_cards {
   height: 100px;
-  width: 60%;
+  width: 80%;
   margin: 100px auto 10px auto;
   border: 1px solid magenta;
 }
@@ -132,11 +132,11 @@ li {
   position: relative;
   display: inline-block;
   height: 90%;
-  width: 20%;
+  width: 12%;
   background-color: white;
   border: 1px solid black;
   border-radius: 5px;
-  margin: 5px;
+  margin: 1px;
   z-index: -999;
   overflow: hidden;
 }
