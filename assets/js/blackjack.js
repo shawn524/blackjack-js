@@ -31,6 +31,9 @@
       },
 
       deal: function(deck, player) {
+        // this is wrong stupid.
+        // deal 2 to the dealer and then if the player stands
+        // deal until 17. Close but no cigar.
         if(player.name === "The House") {
           var houseTotal = 0;
           while(houseTotal < 17) {
