@@ -49,7 +49,20 @@
         var rand = Math.floor(Math.random() * deck.length);
         var card = deck.splice(rand,1);
         player.hand.push(card[0]);
-        // ace check?
+      },
+
+      aceCheck: function(player) {
+        game.user.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            userTotal += 10;
+          } else if(a.value === true) {
+            userTotal += 11;
+          } else if(a.value === false) {
+            userTotal += 1;
+          } else {
+            userTotal += a.value
+          }
+        });
       },
 
       checkBust: function(player) {
