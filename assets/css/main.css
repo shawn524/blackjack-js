@@ -10,7 +10,7 @@ li {
   list-style: none;
   color: white;
   left: 0;
-  border: 1px solid white;
+  /*border: 1px solid white;*/
 }
 
 #container {
@@ -19,7 +19,7 @@ li {
   width: 80%;
   height: 80%;
   margin: 50px auto 0 auto;
-  border: 1px solid green;
+  /*border: 1px solid green;*/
 }
 
 #message_log {
@@ -27,7 +27,7 @@ li {
   float: right;
   clear: both;
   top: 0;
-  border: 1px solid teal;
+  /*border: 1px solid teal;*/
   height: 80%;
   width: 12%;
   right: 10px;
@@ -42,28 +42,28 @@ li {
   position: relative;
   width: 70%;
   margin: 20px auto 0 auto;
-  border: 1px solid blue;
+  /*border: 1px solid blue;*/
 }
 
 #player {
   position: relative;
   width: 70%;
   margin: 0 auto 20px auto;
-  border: 1px solid red;
+  /*border: 1px solid red;*/
 }
 
 #house_cards {
   height: 100px;
   width: 80%;
   margin: 10px auto 100px auto;
-  border: 1px solid orange;
+  /*border: 1px solid orange;*/
 }
 
 #deck {
   position: absolute;
   right: 0;
   top: 0;
-  border: 1px solid olive;
+  /*border: 1px solid olive;*/
   height: 100px;
   width: 60px;
   margin: 10px 10px 0 0;
@@ -73,7 +73,7 @@ li {
   height: 100px;
   width: 80%;
   margin: 100px auto 10px auto;
-  border: 1px solid magenta;
+  /*border: 1px solid magenta;*/
 }
 
 #player_bank {
@@ -100,7 +100,7 @@ li {
   text-decoration: none;
   background-color: #757575;
   border-radius: 4px;
-  border: 1px solid #757575;
+  /*border: 1px solid #757575;*/
   transition: all 0.5s;
 }
 
@@ -134,7 +134,7 @@ li {
   height: 90%;
   width: 12%;
   background-color: white;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   border-radius: 5px;
   margin: 1px;
   z-index: -999;
