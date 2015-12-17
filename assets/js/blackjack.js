@@ -37,7 +37,6 @@
             var rand = Math.floor(Math.random() * deck.length);
             var card = deck.splice(rand,1);
             player.hand.push(card[0]);
-
             player.hand.forEach(function(a) {
               houseTotal += a.value
             })
@@ -73,17 +72,23 @@
       },
 
       play: function() {
-        var userTotal = game.user.hand.reduce(function(a, b) {
-          return a.value + b.value
+        var userTotal = 0;
+        game.user.hand.forEach(function(a) {
+            userTotal += a.value
         });
-        var houseTotal = game.house.hand.reduce(function(a, b) {
-          return a.value + b.value
+        var houseTotal = 0;
+        game.house.hand.forEach(function(a) {
+            houseTotal += a.value
         });
+
+        console.log(userTotal, houseTotal)
 
         if(userTotal > houseTotal) {
           console.log("Player wins!");
         } else if(userTotal < houseTotal) {
           console.log("The house always wins.");
+        } else if(userTotal == houseTotal) {
+          console.log("Push")
         }
       },
 
@@ -95,7 +100,6 @@
   createDeck(mainDeck)
   game.deal(mainDeck, game.user)
   game.deal(mainDeck, game.house)
-  // console.log(game.user.hand)
 
 
 // })
