@@ -38,11 +38,19 @@
       },
 
       deal: function(deck, player) {
+        if(deck.length > 0) {
           for(var i = 0; i<2; i++) {
             var rand = Math.floor(Math.random() * deck.length);
             var card = deck.splice(rand,1);
             player.hand.push(card[0]);
           }
+        } else {
+          newMsg("Empty deck.");
+          newMsg("Game over.");
+          $("#hit").hide();
+          $("#stand").hide();
+          $("#new").hide();
+        }
       },
 
       hit: function(deck, player) {
@@ -94,6 +102,7 @@
           // hide buttons
           $("#hit").hide();
           $("#stand").hide();
+          $("#new").show();
         } else {
           return runningTotal;
         }
@@ -149,12 +158,26 @@
 
   function start() {
     $("#start").click(function() {
-      createDeck(mainDeck)
-      game.deal(mainDeck, game.user)
-      game.deal(mainDeck, game.house)
+      createDeck(mainDeck);
+      game.deal(mainDeck, game.user);
+      game.deal(mainDeck, game.house);
       $("#hit").show();
       $("#stand").show();
       game.showCards(game.house);
+      game.showCards(game.user);
+      $(this).hide();
+    })
+  }
+
+  function newGame() {
+    $("#new").click(function() {
+      game.user.hand = [];
+      game.house.hand = [];
+      game.deal(mainDeck, game.user);
+      game.deal(mainDeck, game.house);
+      $("#hit").show();
+      $("#stand").show();
+      game.showCards(game.user);
       game.showCards(game.user);
       $(this).hide();
     })
@@ -169,7 +192,7 @@
         // win $$$
         newMsg("Player wins!");
       } else if(playerTotal < houseTotal) {
-        newMsg("The House always wins.")
+        newMsg("The House always wins.");
       }
     })
   }
@@ -182,15 +205,16 @@
     })
   }
 
-  $("#hit").hide();
-  $("#stand").hide();
-
   function eventListener() {
     start();
     playerHit();
     stand();
+    newGame();
   }
-  
+
+  $("#hit").hide();
+  $("#stand").hide();
+  $("#new").hide();
   eventListener()
 
 

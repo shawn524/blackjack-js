@@ -57,3 +57,14 @@
           console.log("Push")
         }
       },
+
+
+      // if total still more then 21, bust
+      if(runningTotal > 21) {
+        newMsg(player.name + " bust with " +runningTotal);
+        console.log(player.name + " bust with " +runningTotal);
+        player.bust = true;
+        // hide buttons
+        $("#hit").hide();
+        $("#stand").hide();
+      }
