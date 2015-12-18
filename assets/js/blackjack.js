@@ -65,7 +65,6 @@
             runningTotal += a.value
           }
         });
-        console.log(runningTotal, "first")
         // if greater then 21, run again and check for aces
         // if aces found, set to false, run again
         if(runningTotal > 21) {
@@ -75,7 +74,6 @@
             }
           })
           runningTotal = 0;
-          console.log(runningTotal, "second")
 
           // add up again (probably a better way of doing this)
           player.hand.forEach(function(a) {
@@ -89,19 +87,17 @@
               runningTotal += a.value
             }
           });
-          console.log(runningTotal, "third")
         }
-        
-        // if total still more then 21, bust
         if(runningTotal > 21) {
           newMsg(player.name + " bust with " +runningTotal);
-          console.log(player.name + " bust with " +runningTotal);
           player.bust = true;
           // hide buttons
           $("#hit").hide();
           $("#stand").hide();
+        } else {
+          return runningTotal;
         }
-        console.log(runningTotal, "fourth")
+
         
       },
 
@@ -109,19 +105,23 @@
           var houseTotal = 0;
 
           while(houseTotal < 17) {
-            var rand = Math.floor(Math.random() * deck.length);
-            var card = deck.splice(rand,1);
+            var rand = Math.floor(Math.random() * mainDeck.length);
+            var card = mainDeck.splice(rand,1);
             game.house.hand.push(card[0]);
             game.house.hand.forEach(function(a) {
               if(a.value === "K" || a.value === "Q" || a.value === "J") {
                 houseTotal += 10;
+              } else if(a.value === true) {
+                houseTotal += 11;
+              } else if(a.value === false) {
+                houseTotal += 1;
               } else {
                 houseTotal += a.value
               }
-            })
+            });
           }
 
-          showCards(game.house);
+          game.showCards(game.house);
         },
 
       showCards: function(player) {
@@ -147,9 +147,6 @@
     $(".message").append(msg)
   }
 
-  $("#hit").hide();
-  $("#stand").hide();
-
   function start() {
     $("#start").click(function() {
       createDeck(mainDeck)
@@ -165,7 +162,15 @@
 
   function stand() {
     $("#stand").click(function() {
-
+      game.stand();
+      var playerTotal = game.checkTotal(game.user);
+      var houseTotal = game.checkTotal(game.house);
+      if(playerTotal > houseTotal) {
+        // win $$$
+        newMsg("Player wins!");
+      } else if(playerTotal < houseTotal) {
+        newMsg("The House always wins.")
+      }
     })
   }
 
@@ -177,11 +182,13 @@
     })
   }
 
-
+  $("#hit").hide();
+  $("#stand").hide();
 
   function eventListener() {
     start();
     playerHit();
+    stand();
   }
   
   eventListener()
