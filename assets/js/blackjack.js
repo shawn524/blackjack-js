@@ -28,7 +28,7 @@
         hand: [],
         bust: false,
         area: $("#player_cards"),
-        bank: 100
+        bank: 500
       },
       house: {
         name: "The House",
@@ -36,6 +36,7 @@
         bust: false,
         area: $("#house_cards"),
       },
+      currentBet: 0,
 
       deal: function(deck, player) {
         if(deck.length > 0) {
@@ -50,6 +51,7 @@
           $("#hit").hide();
           $("#stand").hide();
           $("#new").hide();
+          $('.bet').hide();
         }
       },
 
@@ -97,7 +99,12 @@
           });
         }
         if(runningTotal > 21) {
+          if(player.name === "The House") {
+            game.user.bank += game.currentBet*2;
+            newMsg("Player won $"+game.currentBet*2)
+          }
           newMsg(player.name + " bust with " +runningTotal);
+          // currently unused
           player.bust = true;
           // hide buttons
           $("#hit").hide();
@@ -149,6 +156,17 @@
         })
 
       },
+
+      bet: function(bet) {
+        if(bet > game.user.bank) {
+          newMsg("Funds too low");
+        } else {
+          game.user.bank -= bet;
+          game.currentBet = bet;
+          newMsg("Player bet "+bet)
+          $("#player_bank").text("$"+game.user.bank);
+        }
+      },
   } // game obj ends
 
   function newMsg(msg) {
@@ -161,10 +179,12 @@
       createDeck(mainDeck);
       game.deal(mainDeck, game.user);
       game.deal(mainDeck, game.house);
-      $("#hit").show();
-      $("#stand").show();
+      // $("#hit").show();
+      // $("#stand").show();
       game.showCards(game.house);
       game.showCards(game.user);
+      $("#player_bank").show();
+      $(".bet").show();
       $(this).hide();
     })
   }
@@ -175,10 +195,12 @@
       game.house.hand = [];
       game.deal(mainDeck, game.user);
       game.deal(mainDeck, game.house);
-      $("#hit").show();
-      $("#stand").show();
+      // $("#hit").show();
+      // $("#stand").show();
+      $(".bet").show();
       game.showCards(game.user);
-      game.showCards(game.user);
+      game.showCards(game.house);
+      $("#player_bank").text("$"+game.user.bank);
       $(this).hide();
     })
   }
@@ -189,11 +211,17 @@
       var playerTotal = game.checkTotal(game.user);
       var houseTotal = game.checkTotal(game.house);
       if(playerTotal > houseTotal) {
-        // win $$$
-        newMsg("Player wins!");
+        game.user.bank += game.currentBet*2;
+        newMsg("Player won $"+game.currentBet*2);
+        game.currentBet = 0;
+        $("#player_bank").text("$"+game.user.bank);
       } else if(playerTotal < houseTotal) {
-        newMsg("The House always wins.");
+        newMsg("The House always wins");
       }
+      $("#hit").hide();
+      $("#stand").hide();
+      $(".bet").hide();
+      $("#new").show();
     })
   }
 
@@ -202,7 +230,30 @@
       game.hit(mainDeck, game.user);
       game.checkTotal(game.user);
       game.showCards(game.user);
+      // $(".bet").hide();
     })
+  }
+
+  function playerBet() {
+    $("#bet_25").click(function() {
+      game.bet(25);
+      $(".bet").hide();
+      $("#hit").show();
+      $("#stand").show();
+    });
+    $("#bet_50").click(function() {
+      game.bet(50);
+      $(".bet").hide();
+      $("#hit").show();
+      $("#stand").show();
+    });
+    $("#bet_all").click(function() {
+      game.bet(game.user.bank);
+      $(".bet").hide();
+      $("#hit").show();
+      $("#stand").show();
+    });
+    $("#player_bank").text("$"+game.user.bank);
   }
 
   function eventListener() {
@@ -210,11 +261,14 @@
     playerHit();
     stand();
     newGame();
+    playerBet();
   }
 
+  $("#player_bank").text("$"+game.user.bank);
   $("#hit").hide();
   $("#stand").hide();
   $("#new").hide();
+  $(".bet").hide();
   eventListener()
 
 

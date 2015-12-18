@@ -47,20 +47,26 @@ li {
   position: relative;
   width: 70%;
   margin: 20px auto 0 auto;
-  /*border: 1px solid blue;*/
+  border: 3px solid white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #fff;
 }
 
 #player {
   position: relative;
   width: 70%;
   margin: 0 auto 20px auto;
-  /*border: 1px solid red;*/
+  border-left: 3px solid white;
+  border-right: 3px solid white;
+  border-bottom: 3px solid white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #fff;
 }
 
 #house_cards {
   height: 100px;
   width: 80%;
-  margin: 20px auto 100px auto;
+  margin: 22px auto 100px auto;
   /*border: 1px solid orange;*/
 }
 
@@ -77,7 +83,7 @@ li {
 #player_cards {
   height: 100px;
   width: 80%;
-  margin: 100px auto 20px auto;
+  margin: 100px auto 22px auto;
   /*border: 1px solid magenta;*/
 }
 
@@ -91,11 +97,10 @@ li {
 
 .btn {
   position: absolute;
-  right: 0;
   display: inline-block;
   height: 20px;
   width: 40px;
-  padding: 0 20px;
+  padding: 0 10px;
   color: #FFF;
   text-align: center;
   font-size: 8pt;
@@ -109,31 +114,65 @@ li {
   transition: all 0.5s;
 }
 
+.btn:hover {
+  background-color: #9E9E9E;
+  cursor: pointer;
+}
+
 #hit {
   margin: 10px 10px 0 0;
   top:0;
+  right: 0;
 }
 
 #stand {
   margin: 20px 10px 0 0;
   top: 20px;
+  right: 0;
 }
 
 #start {
   margin: 10px 10px 0 0;
   top: 0;
+  right: 0;
 }
 
 #new {
-  top: 0;
   margin: 10px 10px 0 0;
   height: 40px;
+  top: 0;
+  right: 0;
 }
 
-.btn:hover {
-  background-color: #9E9E9E;
-  cursor: pointer;
+#bet_25 {
+  top: 0;
+  margin: 10px 0 0 10px;
+  width: 50px;
+  white-space: nowrap;
 }
+
+#bet_50 {
+  top: 20px;
+  margin: 20px 0 0 10px;
+  width: 50px;
+  white-space: nowrap;
+}
+
+#bet_all {
+  top: 30px;
+  margin: 40px 0 0 10px;
+  width: 50px;
+  white-space: nowrap;
+}
+
+#player_bank {
+  position: relative;
+  left: 90px;
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
+
 
 /*====================*/
 /*Cards*/
