@@ -203,6 +203,10 @@ li {
   margin-left: -25px;
 }
 
+.flipped {
+  display: none;
+}
+
 .heart {
   background-position: 0 -25px;
 }

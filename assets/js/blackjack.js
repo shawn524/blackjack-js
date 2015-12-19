@@ -110,6 +110,7 @@
           $("#hit").hide();
           $("#stand").hide();
           $("#new").show();
+          $(".card").children().removeClass('flipped');
         } else {
           return runningTotal;
         }
@@ -138,11 +139,12 @@
           }
 
           game.showCards(game.house);
+          $(".card").children().removeClass('flipped');
         },
 
       showCards: function(player) {
         var playArea = player.area;
-        playArea.children().remove()
+        playArea.children().remove();
         player.hand.forEach(function(val) {
           var newCard = $("<div class='card'>");
           newCard.append($("<div class='suit'>").addClass(val.suit));
@@ -151,8 +153,16 @@
           } else {
             newCard.append($("<div class='card_number'>").text(val.value));
           }
-          playArea.append(newCard);
 
+          // add the card to the board
+          playArea.append(newCard);
+          // check if the dealer has more then one card out and show the back 
+          if(player.name === "The House" && playArea.children().length >= 1) {
+            var flip = $("#house_cards .card .card_number");
+            for(var i = 1; i<= flip.length; i++) {
+              $(flip[i]).addClass('flipped');
+            }
+          }
         })
 
       },
