@@ -5,3 +5,15 @@
   border: 1px solid red;
   transition: all 1s;
 }
+
+.card {
+  position: relative;
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  
+  transition: all .8s ease .3s;
+  left: 600px;
+  top: -600px;
+
+}

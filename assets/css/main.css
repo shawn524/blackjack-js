@@ -36,11 +36,17 @@ li {
   height: 80%;
   width: 12%;
   right: 10px;
+  overflow: hidden;
 }
 
 .message {
   width: 100%;
   padding: 5px 0;
+  overflow: hidden;
+}
+
+.message li {
+  margin: 5px 0;
 }
 
 #house {
@@ -189,6 +195,11 @@ li {
   margin: 1px;
   z-index: -999;
   overflow: hidden;
+  
+  transition: all .8s ease .3s;
+  /*left: 600px;
+  top: -600px;*/
+
 }
 
 .suit {

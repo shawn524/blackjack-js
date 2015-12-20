@@ -45,6 +45,7 @@
             var card = deck.splice(rand,1);
             player.hand.push(card[0]);
           }
+
         } else {
           newMsg("Empty deck.");
           newMsg("Game over.");
@@ -120,6 +121,17 @@
 
       stand: function() {
           var houseTotal = 0;
+          game.house.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            houseTotal += 10;
+          } else if(a.value === true) {
+            houseTotal += 11;
+          } else if(a.value === false) {
+            houseTotal += 1;
+          } else {
+            houseTotal += a.value
+          }
+        });
 
           while(houseTotal < 17) {
             var rand = Math.floor(Math.random() * mainDeck.length);
@@ -156,7 +168,7 @@
 
           // add the card to the board
           playArea.append(newCard);
-          // check if the dealer has more then one card out and show the back 
+          // check if the dealer has more then one card out and don't show the number
           if(player.name === "The House" && playArea.children().length >= 1) {
             var flip = $("#house_cards .card .card_number");
             for(var i = 1; i<= flip.length; i++) {
@@ -173,26 +185,71 @@
         } else {
           game.user.bank -= bet;
           game.currentBet = bet;
-          newMsg("Player bet "+bet)
+          newMsg("Player bet $"+bet)
           $("#player_bank").text("$"+game.user.bank);
         }
+      },
+
+      blackCheck: function() {
+        var houseTotal = 0;
+        var playerTotal = 0;
+        game.house.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            houseTotal += 10;
+          } else if(a.value === true) {
+            houseTotal += 11;
+          } else if(a.value === false) {
+            houseTotal += 1;
+          } else {
+            houseTotal += a.value
+          }
+        });
+        game.user.hand.forEach(function(a) {
+          if(a.value === "K" || a.value === "Q" || a.value === "J") {
+            playerTotal += 10;
+          } else if(a.value === true) {
+            playerTotal += 11;
+          } else if(a.value === false) {
+            playerTotal += 1;
+          } else {
+            playerTotal += a.value
+          }
+        });
+        if(houseTotal === 21) {
+          newMsg("The House always wins");
+          newMsg("Blackjack!");
+          $("#hit").hide();
+          $("#stand").hide();
+          $(".bet").hide();
+          $("#new").show();
+          $(".card").children().removeClass('flipped');
+        } else if(playerTotal === 21) {
+          newMsg("Player wins $"+game.currentBet*3);
+          newMsg("Blackjack!");
+          game.currentBet=0;
+          $("#hit").hide();
+          $("#stand").hide();
+          $(".bet").hide();
+          $("#new").show();
+          $(".card").children().removeClass('flipped');
+        }
+
       },
   } // game obj ends
 
   function newMsg(msg) {
-    var msg = $("<li>").text(msg)
-    $(".message").append(msg)
+    var msg = $("<li>").text(msg);
+    $(".message").prepend(msg).scrollTop(999999);
   }
 
+// ===== BUTTONS =====
   function start() {
     $("#start").click(function() {
       createDeck(mainDeck);
       game.deal(mainDeck, game.user);
       game.deal(mainDeck, game.house);
-      // $("#hit").show();
-      // $("#stand").show();
-      game.showCards(game.house);
-      game.showCards(game.user);
+      
+      
       $("#player_bank").show();
       $(".bet").show();
       $(this).hide();
@@ -208,8 +265,7 @@
       // $("#hit").show();
       // $("#stand").show();
       $(".bet").show();
-      game.showCards(game.user);
-      game.showCards(game.house);
+      $(".card").remove();
       $("#player_bank").text("$"+game.user.bank);
       $(this).hide();
     })
@@ -250,21 +306,32 @@
       $(".bet").hide();
       $("#hit").show();
       $("#stand").show();
+      game.showCards(game.user);
+      game.showCards(game.house);
+      game.blackCheck();
     });
     $("#bet_50").click(function() {
       game.bet(50);
       $(".bet").hide();
       $("#hit").show();
       $("#stand").show();
+      game.showCards(game.user);
+      game.showCards(game.house);
+      game.blackCheck();
     });
     $("#bet_all").click(function() {
       game.bet(game.user.bank);
       $(".bet").hide();
       $("#hit").show();
       $("#stand").show();
+      game.showCards(game.user);
+      game.showCards(game.house);
+      game.blackCheck();
     });
     $("#player_bank").text("$"+game.user.bank);
   }
+
+  // ===== BUTTONS END =====
 
   function eventListener() {
     start();
