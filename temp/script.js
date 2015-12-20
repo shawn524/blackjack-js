@@ -27,13 +27,14 @@
 
 function move() {
   for(var i=0; i<10; i++) {
-    (function(i) {
-      var newCard = $("<div class='card'>")
-      $("#deck").append(newCard)
-      var x = $("#deck").children()[i]
       setTimeout(function() {
-        $(x).css({'top':i,'left':i})
-      }, 2000)
+    (function(i) {
+        var newCard = $("<div class='card'>")
+        $("#deck").append(newCard)
+        var x = $("#deck").children()[i]
+        $(x).animate({'top':i,'left':i})
     })(i);
+      }, 2000)
   }
 }
+

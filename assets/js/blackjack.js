@@ -102,7 +102,7 @@
         if(runningTotal > 21) {
           if(player.name === "The House") {
             game.user.bank += game.currentBet*2;
-            newMsg("Player won $"+game.currentBet*2)
+            newMsg("<strong>"+"Player won $"+game.currentBet*2+"</strong>")
           }
           newMsg(player.name + " bust with " +runningTotal);
           // currently unused
@@ -132,7 +132,6 @@
             houseTotal += a.value
           }
         });
-          console.log(houseTotal)
 
           while(houseTotal < 17) {
             houseTotal = 0;
@@ -150,7 +149,6 @@
                 houseTotal += a.value
               }
             });
-            console.log(houseTotal)
           }
 
           game.showCards(game.house);
@@ -281,7 +279,7 @@
       var houseTotal = game.checkTotal(game.house);
       if(playerTotal > houseTotal) {
         game.user.bank += game.currentBet*2;
-        newMsg("Player won $"+game.currentBet*2);
+        newMsg("<strong>"+"Player won $"+game.currentBet*2+"</strong>");
         game.currentBet = 0;
         $("#player_bank").text("$"+game.user.bank);
       } else if(playerTotal < houseTotal) {
