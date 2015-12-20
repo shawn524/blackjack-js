@@ -132,8 +132,10 @@
             houseTotal += a.value
           }
         });
+          console.log(houseTotal)
 
           while(houseTotal < 17) {
+            houseTotal = 0;
             var rand = Math.floor(Math.random() * mainDeck.length);
             var card = mainDeck.splice(rand,1);
             game.house.hand.push(card[0]);
@@ -148,6 +150,7 @@
                 houseTotal += a.value
               }
             });
+            console.log(houseTotal)
           }
 
           game.showCards(game.house);
@@ -283,6 +286,10 @@
         $("#player_bank").text("$"+game.user.bank);
       } else if(playerTotal < houseTotal) {
         newMsg("The House always wins");
+      } else if(playerTotal === houseTotal) {
+        game.user.bank += game.currentBet;
+        newMsg("Push")
+        game.currentBet = 0;
       }
       $("#hit").hide();
       $("#stand").hide();
