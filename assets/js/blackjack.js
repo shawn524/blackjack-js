@@ -1,4 +1,4 @@
-// $(document).ready(function() {
+$(document).ready(function() {
   console.log("ready");
 
   // deck
@@ -168,7 +168,9 @@
           }
 
           // add the card to the board
+          newCard.addClass('transitioning');
           playArea.append(newCard);
+          setTimeout(function(){newCard.removeClass('transitioning')})
           // check if the dealer has more then one card out and don't show the number
           if(player.name === "The House" && playArea.children().length >= 1) {
             var flip = $("#house_cards .card .card_number");
@@ -354,4 +356,4 @@
   eventListener()
 
 
-// })
+})
