@@ -199,7 +199,11 @@ li {
   transition: all .8s ease .3s;
   /*left: 600px;
   top: -600px;*/
+}
 
+.card.transitioning {
+  margin-left: 100px;
+  opacity: 0;
 }
 
 .suit {
