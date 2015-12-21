@@ -157,10 +157,11 @@
 
       showCards: function(player) {
         var playArea = player.area;
-        playArea.children().remove();
+        // playArea.children().remove();
         var currentCards = playArea.children();
-        player.hand.forEach(function(val) {
+        player.hand.forEach(function(val, index) {
           var newCard = $("<div class='card'>");
+          newCard.addClass('played');
           newCard.append($("<div class='suit'>").addClass(val.suit));
           if(val.value === true || val.value === false) {
             newCard.append($("<div class='card_number'>").text('A'));
@@ -168,10 +169,13 @@
             newCard.append($("<div class='card_number'>").text(val.value));
           }
 
-          // add the card to the board
-          newCard.addClass('transitioning');
-          playArea.append(newCard);
-          setTimeout(function(){newCard.removeClass('transitioning')})
+          // add the card to the board unless it's already there
+          if(!$(currentCards[index]).hasClass('played')) {
+            newCard.addClass('transitioning');
+            playArea.append(newCard);
+            setTimeout(function(){newCard.removeClass('transitioning')}, 250)
+          }
+
           // check if the dealer has more then one card out and don't show the number
           if(player.name === "The House" && playArea.children().length >= 1) {
             var flip = $("#house_cards .card .card_number");
@@ -228,6 +232,7 @@
           $("#new").show();
           $(".card").children().removeClass('flipped');
         } else if(playerTotal === 21) {
+          game.user.bank += game.currentBet*3;
           newMsg("Player wins $"+game.currentBet*3);
           newMsg("Blackjack!");
           game.currentBet=0;
