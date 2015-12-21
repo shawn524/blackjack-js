@@ -1,4 +1,4 @@
-$(document).ready(function() {
+// $(document).ready(function() {
   console.log("ready");
 
   // deck
@@ -102,7 +102,7 @@ $(document).ready(function() {
         if(runningTotal > 21) {
           if(player.name === "The House") {
             game.user.bank += game.currentBet*2;
-            newMsg("<strong>"+"Player won $"+game.currentBet*2+"</strong>")
+            newMsg("Player won $"+game.currentBet*2)
           }
           newMsg(player.name + " bust with " +runningTotal);
           // currently unused
@@ -158,6 +158,7 @@ $(document).ready(function() {
       showCards: function(player) {
         var playArea = player.area;
         playArea.children().remove();
+        var currentCards = playArea.children();
         player.hand.forEach(function(val) {
           var newCard = $("<div class='card'>");
           newCard.append($("<div class='suit'>").addClass(val.suit));
@@ -281,7 +282,7 @@ $(document).ready(function() {
       var houseTotal = game.checkTotal(game.house);
       if(playerTotal > houseTotal) {
         game.user.bank += game.currentBet*2;
-        newMsg("<strong>"+"Player won $"+game.currentBet*2+"</strong>");
+        newMsg("Player won $"+game.currentBet*2);
         game.currentBet = 0;
         $("#player_bank").text("$"+game.user.bank);
       } else if(playerTotal < houseTotal) {
@@ -303,7 +304,6 @@ $(document).ready(function() {
       game.hit(mainDeck, game.user);
       game.checkTotal(game.user);
       game.showCards(game.user);
-      // $(".bet").hide();
     })
   }
 
@@ -356,4 +356,4 @@ $(document).ready(function() {
   eventListener()
 
 
-})
+// })
